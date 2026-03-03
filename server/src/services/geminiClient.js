@@ -17,12 +17,15 @@ export class GeminiClient {
     }
 
     try {
-      const result = await this.model.generateContent({
-        systemInstruction,
-        contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-      });
+      const prompt = `${systemInstruction}\n\n${userPrompt}`;
+      const result = await this.model.generateContent(prompt);
+      const text = result?.response?.text?.();
 
-      return result.response.text();
+      if (!text || !text.trim()) {
+        throw new Error('Tomt svar fra Gemini');
+      }
+
+      return text;
     } catch (error) {
       console.error('Gemini request failed:', error.message);
       throw new Error('Kunne ikke hente svar fra Gemini akkurat nå.');

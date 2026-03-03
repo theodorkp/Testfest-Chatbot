@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import { WcagStore } from './services/wcagStore.js';
 import { GeminiClient } from './services/geminiClient.js';
 import { buildPrompt } from './services/promptBuilder.js';
+import { buildFallbackReply } from './services/fallbackResponder.js';
 import { validateMessage } from './utils/validation.js';
 
 dotenv.config();
@@ -73,10 +74,12 @@ app.post('/api/chat', async (req, res) => {
       conversationId: safeConversationId,
     });
   } catch (error) {
-    return res.status(502).json({
-      error: 'AI-tjenesten er midlertidig utilgjengelig. Prøv igjen om litt.',
+    const fallbackReply = buildFallbackReply({ message, context });
+    return res.json({
+      reply: fallbackReply,
       conversationId: safeConversationId,
       sources: context.map(({ id, title }) => ({ id, title })),
+      degraded: true,
     });
   }
 });

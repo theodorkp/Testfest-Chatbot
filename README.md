@@ -7,6 +7,7 @@ Et førsteutkast av en fullstack web-chatbot som svarer på spørsmål om univer
 - **Backend:** Node.js + Express
 - **LLM:** Google Gemini API (`@google/generative-ai`)
 - **RAG-kunnskapsbase:** Lokal JSON (`/data/wcag.json`) med enkel TF-IDF-lignende tekstsøk
+- Hvis Gemini feiler, returneres et reserve-svar basert på lokal WCAG-kontekst i stedet for hard API-feil.
 
 ## Monorepo-struktur
 ```txt
@@ -59,3 +60,55 @@ npm run start
 ```bash
 npm test
 ```
+
+## API
+### `GET /api/health`
+Svar:
+```json
+{ "ok": true }
+```
+
+### `POST /api/chat`
+Body:
+```json
+{ "message": "Hvordan forbedre kontrast?", "conversationId": "optional" }
+```
+
+Svar:
+```json
+{
+  "reply": "...",
+  "sources": [{ "id": "1.4.3", "title": "Kontrast (minimum)" }],
+  "conversationId": "uuid"
+}
+```
+
+## Hvordan RAG fungerer i dette oppsettet
+1. Brukermeldingen sendes til `POST /api/chat`.
+2. `wcagStore` leser `data/wcag.json` og scorer WCAG-elementer med enkel tokenisering + IDF-basert relevans.
+3. Topp treff (typisk 3–5) sendes som **kontekst** inn i prompten til Gemini.
+4. `promptBuilder` instruerer modellen til å:
+   - svare på norsk,
+   - bruke fast struktur,
+   - basere seg på konteksten,
+   - være tydelig ved manglende dekning.
+5. Svaret returneres til klienten sammen med `sources` (id + title).
+
+## Ekte WCAG-data
+Bytt ut `data/wcag.json` med deres faktiske data i format:
+```json
+[
+  {
+    "id": "1.1.1",
+    "title": "...",
+    "text": "...",
+    "level": "A|AA|AAA",
+    "tags": ["..."]
+  }
+]
+```
+
+Tips:
+- Hold `text` informativt og konkret.
+- Bruk relevante `tags` for bedre retrieval.
+- Øk datamengden gradvis og valider kvaliteten på svarene.

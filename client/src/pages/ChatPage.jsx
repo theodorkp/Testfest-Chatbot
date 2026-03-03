@@ -14,9 +14,11 @@ export function ChatPage() {
   const [conversationId, setConversationId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [warning, setWarning] = useState('');
 
   const handleSend = async (text) => {
     setError('');
+    setWarning('');
     setMessages((prev) => [...prev, { role: 'user', text }]);
     setLoading(true);
 
@@ -34,6 +36,9 @@ export function ChatPage() {
       }
 
       setConversationId(payload.conversationId);
+      if (payload.degraded) {
+        setWarning('Gemini svarte ikke akkurat nå. Du ser et reserve-svar basert på lokal WCAG-kunnskapsbase.');
+      }
       setMessages((prev) => [
         ...prev,
         { role: 'assistant', text: payload.reply, sources: payload.sources || [] },
@@ -53,6 +58,11 @@ export function ChatPage() {
       </header>
 
       <MessageList messages={messages} loading={loading} />
+      {warning && (
+        <p className="mt-3 rounded-lg bg-amber-100 px-3 py-2 text-sm text-amber-800" role="status">
+          {warning}
+        </p>
+      )}
       {error && (
         <p className="mt-3 rounded-lg bg-red-100 px-3 py-2 text-sm text-red-700" role="alert">
           {error}
