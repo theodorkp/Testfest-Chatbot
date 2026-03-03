@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export class GeminiClient {
-  constructor({ apiKey, model = 'gemini-1.5-flash' }) {
+  constructor({ apiKey, model = 'gemini-2.5-flash-lite' }) {
     this.enabled = Boolean(apiKey);
     this.modelName = model;
 
