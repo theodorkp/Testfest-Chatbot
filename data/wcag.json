@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1.1.1",
+    "title": "Ikke-tekstlig innhold",
+    "text": "Alt ikke-tekstlig innhold som bilder og ikoner skal ha et tekstalternativ som formidler samme mening.",
+    "level": "A",
+    "tags": ["bilder", "alt-tekst", "ikoner"]
+  },
+  {
+    "id": "1.4.3",
+    "title": "Kontrast (minimum)",
+    "text": "Tekst og bilder av tekst skal ha en kontrast på minst 4.5:1 mot bakgrunnen for vanlig tekst.",
+    "level": "AA",
+    "tags": ["kontrast", "farger", "lesbarhet"]
+  },
+  {
+    "id": "2.1.1",
+    "title": "Tastatur",
+    "text": "All funksjonalitet skal kunne brukes med tastatur alene, uten behov for mus.",
+    "level": "A",
+    "tags": ["tastatur", "navigasjon", "interaksjon"]
+  },
+  {
+    "id": "2.4.7",
+    "title": "Synlig fokus",
+    "text": "Tastaturfokus skal være synlig slik at brukeren ser hvilket element som er aktivt.",
+    "level": "AA",
+    "tags": ["fokus", "tastatur", "skjema"]
+  },
+  {
+    "id": "3.3.1",
+    "title": "Feilidentifikasjon",
+    "text": "Hvis en inndatafeil oppdages automatisk skal feilfeltet identifiseres og beskrives tydelig med tekst.",
+    "level": "A",
+    "tags": ["skjema", "feilmelding", "validering"]
+  }
+]
